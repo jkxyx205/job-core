@@ -3,11 +3,14 @@ package com.yodean.job.core.controller;
 import com.yodean.job.core.bo.ScheduleDetail;
 import com.yodean.job.core.service.ScheduleService;
 import com.yodean.job.job.SampleJob;
+import org.quartz.JobKey;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by rick on 6/11/18.
@@ -98,4 +101,8 @@ public class ApiController {
         return "executeOnceJob";
     }
 
+    @GetMapping("/list")
+    public List<JobKey> list() throws SchedulerException {
+        return scheduleService.listAllJobs();
+    }
 }

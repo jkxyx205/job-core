@@ -3,9 +3,16 @@ package com.yodean.job.core.service;
 
 import com.yodean.job.core.bo.ScheduleDetail;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.quartz.JobBuilder.newJob;
 
@@ -14,6 +21,8 @@ import static org.quartz.JobBuilder.newJob;
  */
 @Service
 public class ScheduleService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
 
     private final Scheduler scheduler;
 
@@ -44,6 +53,8 @@ public class ScheduleService {
                 .withSchedule(scheduleBuilder).build();
 
         scheduler.scheduleJob(job, trigger);
+
+
     }
 
 
@@ -110,4 +121,30 @@ public class ScheduleService {
         scheduler.triggerJob(jobKey);
     }
 
+    public List<JobKey> listAllJobs() throws SchedulerException {
+
+        List<JobKey> jobKeyList = new ArrayList<>(scheduler.getJobGroupNames().size());
+
+        for (String groupName : scheduler.getJobGroupNames()) {
+
+            for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
+
+                String jobName = jobKey.getName();
+                String jobGroup = jobKey.getGroup();
+
+                //get job's trigger
+                List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
+                Date nextFireTime = triggers.get(0).getNextFireTime();
+
+                logger.info("[jobName] : " + jobName + " [groupName] : "
+                        + jobGroup + " - " + nextFireTime);
+
+                jobKeyList.add(jobKey);
+
+            }
+
+        }
+
+        return jobKeyList;
+    }
 }
