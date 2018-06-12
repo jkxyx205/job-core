@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /job
+
+
+
+spring:
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-mm HH:mm:ss
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/job?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: jkxyx205
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+mybatis:
+  type-aliases-package: com.yodean.oa
+  config-locations: classpath*:mybatis-config.xml
+  mapper-locations: mapper/*.xml
+
+logging:
+  level:
+    org.springframework.web: ERROR
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: /Users/rick/jkxyx205/log/job.log
+
