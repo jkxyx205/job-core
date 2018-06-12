@@ -2,13 +2,10 @@
 
 * job
 job的名称／组，job执行的方法
-
 * trigger
 trigger的名称／组，触发时间
-
 * schedule
 任务调度器
-
 * misfire
 错过的，指本来应该被执行但实际没有被执行的任务调度
 
@@ -24,7 +21,8 @@ Quartz 任务调度的核心元素是 scheduler, trigger 和 job，其中 trigge
 
 参考资料:
 
-[http://www.quartz-scheduler.org/documentation/](http://www.quartz-scheduler.org/documentation/) 
+[http://www.quartz-scheduler.org/documentation/](http://www.quartz-scheduler.org/documentation/)
 
 [https://www.ibm.com/developerworks/cn/opensource/os-cn-quartz/](https://www.ibm.com/developerworks/cn/opensource/os-cn-quartz/)
+
 [http://cron.qqe2.com/](http://cron.qqe2.com/)
