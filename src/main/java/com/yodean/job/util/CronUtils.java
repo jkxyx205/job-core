@@ -50,7 +50,8 @@ public final class CronUtils {
     }
 
     public static void main(String[] args) throws ParseException {
-//        CronUtils.getExecuteTime("0 15 18 * * ?", new Date());
+
+        CronUtils.getExecuteTime("0 0 0 1,2 8 ? 2019", new Date(), new Date());
 //        CronUtils.getNextExecuteTime(1, 23, "0/30 * * * * ? ");
     }
 }

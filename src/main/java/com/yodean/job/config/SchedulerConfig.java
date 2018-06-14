@@ -46,6 +46,7 @@ public class SchedulerConfig {
         factory.setApplicationContext(applicationContext);
         factory.setQuartzProperties(quartzProperties());
         factory.setGlobalJobListeners(jobsListenerService);
+        factory.setStartupDelay(30);
         return factory;
     }
 
