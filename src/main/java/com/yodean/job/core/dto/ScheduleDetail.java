@@ -1,4 +1,4 @@
-package com.yodean.job.core.bo;
+package com.yodean.job.core.dto;
 
 import org.springframework.scheduling.quartz.QuartzJobBean;
 

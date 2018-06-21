@@ -1,6 +1,6 @@
 package com.yodean.job.core.controller;
 
-import com.yodean.job.core.bo.ScheduleDetail;
+import com.yodean.job.core.dto.ScheduleDetail;
 import com.yodean.job.core.service.ScheduleService;
 import com.yodean.job.job.SampleJob;
 import org.quartz.JobKey;

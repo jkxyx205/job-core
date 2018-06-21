@@ -1,7 +1,7 @@
 package com.yodean.job.core.service;
 
 
-import com.yodean.job.core.bo.ScheduleDetail;
+import com.yodean.job.core.dto.ScheduleDetail;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.spi.OperableTrigger;
