@@ -1,6 +1,8 @@
 package com.yodean.job.core.service;
 
-import com.yodean.job.core.dto.CronExpress;
+import com.yodean.job.core.dto.JobExpress;
+import com.yodean.job.core.service.resolver.DailyExpressResolver;
+import com.yodean.job.core.service.resolver.JobExpressResolver;
 import com.yodean.job.job.AlertJob;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Objects;
 
 import static org.quartz.JobBuilder.newJob;
@@ -28,34 +31,34 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
     /**
      * 添加任务
-     * @param cronExpress
+     * @param jobExpress
      * @throws SchedulerException
      */
     @Override
-    public void addSchedule(CronExpress cronExpress) throws SchedulerException {
+    public void addSchedule(JobExpress jobExpress) throws SchedulerException, ParseException {
+
         JobDetail job =
                 newJob(AlertJob.class)
                         .requestRecovery(true)
-                        .withIdentity(cronExpress.getName())
-                        .usingJobData(new JobDataMap(cronExpress.getJobDateMap()))
+                        .withIdentity(jobExpress.getName())
+                        .usingJobData(new JobDataMap(jobExpress.getJobDataMap()))
                         .build();
 
-        ScheduleBuilder<CronTrigger> scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpress.getCronString());
+        JobExpressResolver jobExpressResolver = new DailyExpressResolver(jobExpress);
 
-
-         TriggerBuilder tb = TriggerBuilder.newTrigger()
+        TriggerBuilder tb = TriggerBuilder.newTrigger()
                 .forJob(job)
-                .withIdentity(cronExpress.getName())
-                .startAt(cronExpress.getStartDate())
-                .withSchedule(scheduleBuilder);
+                .withIdentity(jobExpress.getName())
+                .startAt(jobExpressResolver.getStartDate())
+                .withSchedule(jobExpressResolver.getScheduleBuilder());
 
-        if (Objects.nonNull(cronExpress.getEndDate())) {
-            tb.endAt(cronExpress.getEndDate());
+        if (Objects.nonNull(jobExpress.getEndDate())) {
+            tb.endAt(jobExpressResolver.getEndDate());
         }
 
         Trigger trigger = tb.build();
-
         scheduler.scheduleJob(job, trigger);
+
     }
 
     /***
@@ -64,21 +67,22 @@ public class ScheduleManagerImpl implements ScheduleManager {
      * @throws SchedulerException
      */
     @Override
-    public void updateSchedule(CronExpress cronExpress) throws SchedulerException {
-        ScheduleBuilder<CronTrigger> scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpress.getCronString());
-
-        TriggerBuilder tb = TriggerBuilder.newTrigger()
-                .withIdentity(cronExpress.getName())
-                .startAt(cronExpress.getStartDate())
-                .withSchedule(scheduleBuilder);
-
-        if (Objects.nonNull(cronExpress.getEndDate())) {
-            tb.endAt(cronExpress.getEndDate());
-        }
-
-        Trigger trigger = tb.build();
-
-        scheduler.rescheduleJob(new TriggerKey(cronExpress.getName()), trigger);
+    public void updateSchedule(JobExpress cronExpress) throws SchedulerException {
+//        ScheduleBuilder<CronTrigger> scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpress.getCronString());
+//
+//        TriggerBuilder tb = TriggerBuilder.newTrigger()
+//                .withIdentity(cronExpress.getName())
+//                .startAt(cronExpress.getStartDate())
+//                .withSchedule(scheduleBuilder);
+//
+//        if (Objects.nonNull(cronExpress.getEndDate())) {
+//            tb.endAt(cronExpress.getEndDate());
+//        }
+//
+//        Trigger trigger = tb.build();
+//
+//        scheduler.rescheduleJob(new TriggerKey(cronExpress.getName()), trigger);
+        return;
     }
 
     /**
@@ -88,9 +92,36 @@ public class ScheduleManagerImpl implements ScheduleManager {
      * @throws SchedulerException
      */
     @Override
-    public boolean deleteSchedule(CronExpress cronExpress) throws SchedulerException {
-        JobKey jobKey = new JobKey(cronExpress.getName());
-        return scheduler.deleteJob(jobKey);
+    public boolean deleteSchedule(JobExpress cronExpress) throws SchedulerException {
+//        JobKey jobKey = new JobKey(cronExpress.getName());
+//        return scheduler.deleteJob(jobKey);
+        return true;
     }
 
+//    public void addTest(CronExpress cronExpress) throws SchedulerException {
+//        JobDetail job =
+//                newJob(AlertJob.class)
+//                        .requestRecovery(true)
+//                        .withIdentity(cronExpress.getName())
+//                        .usingJobData(new JobDataMap(cronExpress.getJobDateMap()))
+//                        .build();
+//
+//        ScheduleBuilder<CalendarIntervalTrigger> scheduleBuilder = CalendarIntervalScheduleBuilder.calendarIntervalSchedule().withIntervalInWeeks(2);
+//
+//
+//        TriggerBuilder tb = TriggerBuilder.newTrigger()
+//                .forJob(job)
+//                .withIdentity(cronExpress.getName())
+//                .startAt(cronExpress.getStartDate())
+//                .withSchedule(scheduleBuilder);
+//
+//        if (Objects.nonNull(cronExpress.getEndDate())) {
+//            tb.endAt(cronExpress.getEndDate());
+//        }
+//
+//        Trigger trigger = tb.build();
+//
+//
+////        scheduler.scheduleJob(job, trigger);
+//    }
 }
